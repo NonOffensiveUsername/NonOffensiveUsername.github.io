@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+
+<html lang=en>
+
+<head>
+
+	<title>Armada Planet Generator</title>
+	
+	<meta charset="utf-8">
+	
+	<style>
+	
+		#mainlist {
+			width: 250px;
+		}
+		
+		span {
+			float: right;
+		}
+		
+		.sublist li:nth-child(even) {
+			background-color: #f2f2f2;
+		}
+	
+	</style>
+
+</head>
+
+<body>
+	
+	<script>
+	
+		function genPlanet() {
+			// first, we scramble a list of the biome types
+			biomes = [ "grass", "forest", "marsh", "jungle", "desert", "tundra", "mountain", "arctic", "magma"]
+			
+			m = biomes.length
+			
+			while (m) {
+				// pick a remaining element
+				i = Math.floor(Math.random() * m--)
+				// swap it with the current element
+				temp = biomes[m]
+				biomes[m] = biomes[i]
+				biomes[i] = temp
+			}
+			
+			// the amount of the planet's surface which hasn't been assigned a biome
+			remainingLand = 1
+			// our current position in the (scrambled) biome list
+			e = 0
+			biomeAmounts = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+			
+			//take chunks out of the unassigned land until it's gone
+			while (remainingLand > 0) {
+				rand = Math.random() * .6
+				if (rand > remainingLand) { rand = remainingLand }
+				biomeAmounts[e++] += Math.floor(rand * 100)
+				remainingLand -= rand
+				if (e > biomes.length) { e = 0 }
+			}
+			
+			//display how the land was assigned
+			for (o = 0; o < biomes.length; o++) {
+				document.getElementById(biomes[o]).innerHTML = biomeAmounts[o] + '%'
+			}
+			
+			//generate planets size relative to Earth
+			planetSize = Math.random() + .5
+			planetSize *= 100
+			planetSize = Math.floor(planetSize)
+			planetSize /= 100
+			document.getElementById('size').innerHTML = planetSize + ' Earths'
+			
+			//generate the percentage of the planet covered by oceans
+			oceanCover = Math.floor(Math.random() * 100)
+			document.getElementById('ocean').innerHTML = oceanCover + '%'
+			
+			//determine resource ranks
+			resources = ["metal", "exo-metal", "nuke", "gem", "d-crystal", "wood", "food", "tuff-stuf", "shiny-stuff"]
+			
+			for (a = 0; a < resources.length; a++) {
+				if (Math.random() > .95) {
+					rankSeed = Math.random()
+					if (rankSeed > .95) {
+						document.getElementById(resources[a]).innerHTML = "4 ranks"
+					} else if (rankSeed > .85) {
+						document.getElementById(resources[a]).innerHTML = "3 ranks"
+					} else if (rankSeed > .75) {
+						document.getElementById(resources[a]).innerHTML = "2 ranks"
+					} else {
+						document.getElementById(resources[a]).innerHTML = "1 ranks"
+					}
+				} else {
+					document.getElementById(resources[a]).innerHTML = "0 ranks"
+				}
+			}
+		}
+	
+	</script>
+	
+	<h3>Planet Generator</h3>
+	<h4>Version 1.0</h4>
+	
+	<ul id="mainlist">
+	
+		<li>Size: %<span id="size"></span></li>
+		<li>Ocean Coverage: %<span id="ocean"></span></li>
+		<li>Land Composition:
+			<ul class="sublist">
+				<li>Grasslands: <span id="grass"></span></li>
+				<li>Forests: <span id="forest"></span></li>
+				<li>Marshes: <span id="marsh"></span></li>
+				<li>Jungles: <span id="jungle"></span></li>
+				<li>Deserts: <span id="desert"></span></li>
+				<li>Tundras: <span id="tundra"></span></li>
+				<li>Mountains: <span id="mountain"></span></li>
+				<li>Arctic Wastes: <span id="arctic"></span></li>
+				<li>Magmatic Wastes: <span id="magma"></span></li>
+			</ul>
+		</li>
+		<li>Resources:
+			<ul class="sublist">
+				<li>Heavy Metals: <span id="metal"></span> </li>
+				<li>Exotic Metals: <span id="exo-metal"></span> </li>
+				<li>Nuclear Materials: <span id="nuke"></span> </li>
+				<li>Rare Gems: <span id="gem"></span> </li>
+				<li>Demeritium: <span id="d-crystal"></span> </li>
+				<li>Wood: <span id="wood"></span> </li>
+				<li>Food: <span id="food"></span> </li>
+				<li>Murjanium: <span id="tuff-stuf"></span> </li>
+				<li>Scellium: <span id="shiny-stuff"></span> </li>
+			</ul>
+		</li>
+	
+	</ul>
+	
+	<button onclick="genPlanet()">Generate Planet</button>
+	
+	<p>To do:
+		<ul class="sublist">
+			<li>Weight ocean coverage towards ~70%</li>
+			<li>Change planet size: range should be .5 to 10 earths, weighted towards smaller planets</li>
+		</ul>
+	</p>
+	
+</body>
+
+</html>
