@@ -21,6 +21,10 @@
 		.sublist li:nth-child(even) {
 			background-color: #f2f2f2;
 		}
+		
+		.done {
+			text-decoration: line-through;
+		}
 	
 	</style>
 
@@ -66,15 +70,48 @@
 			}
 			
 			//generate planets size relative to Earth
+			
+			/* old method
 			planetSize = Math.random() + .5
 			planetSize *= 100
 			planetSize = Math.floor(planetSize)
 			planetSize /= 100
 			document.getElementById('size').innerHTML = planetSize + ' Earths'
+			*/
+			
+			//new method
+			
+			planetSizes =	[
+								1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+								1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+								1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+								2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5,
+								5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 9, 9, 10
+							]
+			
+			sizeSelector = Math.floor(Math.random() * 100)
+			sizeModifier = Math.random() - .5
+			planetSize = (planetSizes[sizeSelector] + sizeModifier).toFixed(2)
+			document.getElementById('size').innerHTML = planetSize + ' Earths'
 			
 			//generate the percentage of the planet covered by oceans
+			
+			/* old method
 			oceanCover = Math.floor(Math.random() * 100)
 			document.getElementById('ocean').innerHTML = oceanCover + '%'
+			*/
+			
+			//new method
+			
+			oceanCoverages =	[
+									95, 90, 85, 80, 80, 80, 80, 80, 80, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75,
+									70, 70, 70, 70, 70, 70, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10,  5
+								]
+			
+			coverageSelector = Math.floor(Math.random() * oceanCoverages.length)
+			coverageModifier = Math.floor(Math.random() * 5)
+			oceanCoverage = (oceanCoverages[coverageSelector] + coverageModifier)
+			document.getElementById('ocean').innerHTML = oceanCoverage + '%'
 			
 			//determine resource ranks
 			resources = ["metal", "exo-metal", "nuke", "gem", "d-crystal", "wood", "food", "tuff-stuf", "shiny-stuff"]
@@ -95,12 +132,13 @@
 					document.getElementById(resources[a]).innerHTML = "0 ranks"
 				}
 			}
+			
 		}
 	
 	</script>
 	
 	<h3>Planet Generator</h3>
-	<h4>Version 1.0</h4>
+	<h4>Version 1.1</h4>
 	
 	<ul id="mainlist">
 	
@@ -137,12 +175,11 @@
 	
 	<button onclick="genPlanet()">Generate Planet</button>
 	
-	<p>To do:
-		<ul class="sublist">
-			<li>Weight ocean coverage towards ~70%</li>
-			<li>Change planet size: range should be .5 to 10 earths, weighted towards smaller planets</li>
-		</ul>
-	</p>
+	To do:
+	<ul class="sublist">
+		<li class="done">Weight ocean coverage towards ~70%</li>
+		<li class="done">Change planet size: range should be .5 to 10 earths, weighted towards smaller planets</li>
+	</ul>
 	
 </body>
 
