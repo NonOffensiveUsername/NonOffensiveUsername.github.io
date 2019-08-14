@@ -25,6 +25,11 @@
 		.done {
 			text-decoration: line-through;
 		}
+		
+		canvas {
+			border: 2px solid black;
+			float: right;
+		}
 	
 	</style>
 
@@ -36,7 +41,7 @@
 	
 		function genPlanet() {
 			// first, we scramble a list of the biome types
-			biomes = [ "grass", "forest", "marsh", "jungle", "desert", "tundra", "mountain", "arctic", "magma"]
+			biomes = [ "grass", "forest", "marsh", "jungle", "desert", "tundra", "mountain", "arctic", "magma" ]
 			
 			m = biomes.length
 			
@@ -136,6 +141,10 @@
 		}
 	
 	</script>
+	
+	<script src="planetRendering.js"></script>
+	
+	<canvas id="canvas" width="800px" height="400px"></canvas>
 	
 	<h3>Planet Generator</h3>
 	<h4>Version 1.1</h4>
