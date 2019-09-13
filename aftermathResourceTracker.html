@@ -59,10 +59,8 @@
 		#vehicle-layer { background-color: darkgreen; }
 		#naval-layer { background-color: navy; }
 		
-		#metal-layer { background-color: darkgrey; }
 		#food-layer { background-color: green; }
 		#construction-layer { background-color: yellow; }
-		#rare-metal-layer { background-color: blue; }
 	
 	</style>
 
@@ -85,33 +83,33 @@
 	
 	<div class="layer indented" id="space-layer">
 	
-		<div class="button" onclick="changeResource('space', -10)"><<</div>
-		<div class="button" onclick="changeResource('space', -1)"><</div>
+		<div class="button" onclick="changeResource('space', -10)">&lt;&lt;</div>
+		<div class="button" onclick="changeResource('space', -1)">&lt;</div>
 		<div class="counter" id="space">0</div>
-		<div class="button" onclick="changeResource('space', 1)">></div>
-		<div class="button" onclick="changeResource('space', 10)">>></div>
+		<div class="button" onclick="changeResource('space', 1)">&gt;</div>
+		<div class="button" onclick="changeResource('space', 10)">&gt;&gt;</div>
 		<div class="label">Space</div>
 	
 	</div>
 	
 	<div class="layer indented" id="ground-layer">
 	
-		<div class="button" onclick="changeResource('ground', -10)"><<</div>
-		<div class="button" onclick="changeResource('ground', -1)"><</div>
+		<div class="button" onclick="changeResource('ground', -10)">&lt;&lt;</div>
+		<div class="button" onclick="changeResource('ground', -1)">&lt;</div>
 		<div class="counter" id="ground">0</div>
-		<div class="button" onclick="changeResource('ground', 1)">></div>
-		<div class="button" onclick="changeResource('ground', 10)">>></div>
+		<div class="button" onclick="changeResource('ground', 1)">&gt;</div>
+		<div class="button" onclick="changeResource('ground', 10)">&gt;&gt;</div>
 		<div class="label">Ground</div>
 	
 	</div>
 	
 	<div class="layer indented" id="solar-layer">
 	
-		<div class="button" onclick="changeResource('solar', -10)"><<</div>
-		<div class="button" onclick="changeResource('solar', -1)"><</div>
+		<div class="button" onclick="changeResource('solar', -10)">&lt;&lt;</div>
+		<div class="button" onclick="changeResource('solar', -1)">&lt;</div>
 		<div class="counter" id="solar">0</div>
-		<div class="button" onclick="changeResource('solar', 1)">></div>
-		<div class="button" onclick="changeResource('solar', 10)">>></div>
+		<div class="button" onclick="changeResource('solar', 1)">&gt;</div>
+		<div class="button" onclick="changeResource('solar', 10)">&gt;&gt;</div>
 		<div class="label">Solar</div>
 	
 	</div>
@@ -120,100 +118,78 @@
 	
 	<div class="layer indented" id="ballistic-layer">
 	
-		<div class="button" onclick="changeResource('ballistic', -10)"><<</div>
-		<div class="button" onclick="changeResource('ballistic', -1)"><</div>
+		<div class="button" onclick="changeResource('ballistic', -10)">&lt;&lt;</div>
+		<div class="button" onclick="changeResource('ballistic', -1)">&lt;</div>
 		<div class="counter" id="ballistic">0</div>
-		<div class="button" onclick="changeResource('ballistic', 1)">></div>
-		<div class="button" onclick="changeResource('ballistic', 10)">>></div>
+		<div class="button" onclick="changeResource('ballistic', 1)">&gt;</div>
+		<div class="button" onclick="changeResource('ballistic', 10)">&gt;&gt;</div>
 		<div class="label">Ballistic</div>
 	
 	</div>
 	
 	<div class="layer indented" id="laser-layer">
 	
-		<div class="button" onclick="changeResource('laser', -10)"><<</div>
-		<div class="button" onclick="changeResource('laser', -1)"><</div>
+		<div class="button" onclick="changeResource('laser', -10)">&lt;&lt;</div>
+		<div class="button" onclick="changeResource('laser', -1)">&lt;</div>
 		<div class="counter" id="laser">0</div>
-		<div class="button" onclick="changeResource('laser', 1)">></div>
-		<div class="button" onclick="changeResource('laser', 10)">>></div>
+		<div class="button" onclick="changeResource('laser', 1)">&gt;</div>
+		<div class="button" onclick="changeResource('laser', 10)">&gt;&gt;</div>
 		<div class="label">Laser</div>
 	
 	</div>
 	
 	<div class="layer indented" id="plasma-layer">
 	
-		<div class="button" onclick="changeResource('plasma', -10)"><<</div>
-		<div class="button" onclick="changeResource('plasma', -1)"><</div>
+		<div class="button" onclick="changeResource('plasma', -10)">&lt;&lt;</div>
+		<div class="button" onclick="changeResource('plasma', -1)">&lt;</div>
 		<div class="counter" id="plasma">0</div>
-		<div class="button" onclick="changeResource('plasma', 1)">></div>
-		<div class="button" onclick="changeResource('plasma', 10)">>></div>
+		<div class="button" onclick="changeResource('plasma', 1)">&gt;</div>
+		<div class="button" onclick="changeResource('plasma', 10)">&gt;&gt;</div>
 		<div class="label">Plasma</div>
 	
 	</div>
 	
 	<div class="layer indented" id="vehicle-layer">
 	
-		<div class="button" onclick="changeResource('vehicle', -10)"><<</div>
-		<div class="button" onclick="changeResource('vehicle', -1)"><</div>
+		<div class="button" onclick="changeResource('vehicle', -10)">&lt;&lt;</div>
+		<div class="button" onclick="changeResource('vehicle', -1)">&lt;</div>
 		<div class="counter" id="vehicle">0</div>
-		<div class="button" onclick="changeResource('vehicle', 1)">></div>
-		<div class="button" onclick="changeResource('vehicle', 10)">>></div>
+		<div class="button" onclick="changeResource('vehicle', 1)">&gt;</div>
+		<div class="button" onclick="changeResource('vehicle', 10)">&gt;&gt;</div>
 		<div class="label">Vehicle</div>
 	
 	</div>
 	
 	<div class="layer indented" id="naval-layer">
 	
-		<div class="button" onclick="changeResource('naval', -10)"><<</div>
-		<div class="button" onclick="changeResource('naval', -1)"><</div>
+		<div class="button" onclick="changeResource('naval', -10)">&lt;&lt;</div>
+		<div class="button" onclick="changeResource('naval', -1)">&lt;</div>
 		<div class="counter" id="naval">0</div>
-		<div class="button" onclick="changeResource('naval', 1)">></div>
-		<div class="button" onclick="changeResource('naval', 10)">>></div>
+		<div class="button" onclick="changeResource('naval', 1)">&gt;</div>
+		<div class="button" onclick="changeResource('naval', 10)">&gt;&gt;</div>
 		<div class="label">Naval</div>
-	
-	</div>
-	
-	<div class="layer" id="metal-layer">
-	
-		<div class="button" onclick="changeResource('metal', -10)"><<</div>
-		<div class="button" onclick="changeResource('metal', -1)"><</div>
-		<div class="counter" id="metal">0</div>
-		<div class="button" onclick="changeResource('metal', 1)">></div>
-		<div class="button" onclick="changeResource('metal', 10)">>></div>
-		<div class="label">Metal</div>
 	
 	</div>
 	
 	<div class="layer" id="food-layer">
 	
-		<div class="button" onclick="changeResource('food', -10)"><<</div>
-		<div class="button" onclick="changeResource('food', -1)"><</div>
+		<div class="button" onclick="changeResource('food', -10)">&lt;&lt;</div>
+		<div class="button" onclick="changeResource('food', -1)">&lt;</div>
 		<div class="counter" id="food">0</div>
-		<div class="button" onclick="changeResource('food', 1)">></div>
-		<div class="button" onclick="changeResource('food', 10)">>></div>
+		<div class="button" onclick="changeResource('food', 1)">&gt;</div>
+		<div class="button" onclick="changeResource('food', 10)">&gt;&gt;</div>
 		<div class="label">Food</div>
 	
 	</div>
 	
 	<div class="layer" id="construction-layer">
 	
-		<div class="button" onclick="changeResource('construction', -10)"><<</div>
-		<div class="button" onclick="changeResource('construction', -1)"><</div>
+		<div class="button" onclick="changeResource('construction', -10)">&lt;&lt;</div>
+		<div class="button" onclick="changeResource('construction', -1)">&lt;</div>
 		<div class="counter" id="construction">0</div>
-		<div class="button" onclick="changeResource('construction', 1)">></div>
-		<div class="button" onclick="changeResource('construction', 10)">>></div>
+		<div class="button" onclick="changeResource('construction', 1)">&gt;</div>
+		<div class="button" onclick="changeResource('construction', 10)">&gt;&gt;</div>
 		<div class="label">Construction Mats</div>
-	
-	</div>
-	
-	<div class="layer" id="rare-metal-layer">
-	
-		<div class="button" onclick="changeResource('rare', -10)"><<</div>
-		<div class="button" onclick="changeResource('rare', -1)"><</div>
-		<div class="counter" id="rare">0</div>
-		<div class="button" onclick="changeResource('rare', 1)">></div>
-		<div class="button" onclick="changeResource('rare', 10)">>></div>
-		<div class="label">Rare Metals</div>
 	
 	</div>
 
