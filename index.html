@@ -1,195 +1,1021 @@
-<!DOCTYPE HTML>
-
-<html lang=en>
+<!doctype html>
+<html lang="en">
 
 <head>
-
-	<title>Armada Planet Generator</title>
-	
-	<meta charset="utf-8">
-	
-	<style>
-	
-		#mainlist {
-			width: 250px;
-		}
-		
-		span {
-			float: right;
-		}
-		
-		.sublist li:nth-child(even) {
-			background-color: #f2f2f2;
-		}
-		
-		.done {
-			text-decoration: line-through;
-		}
-		
-		canvas {
-			border: 2px solid black;
-			float: right;
-		}
-	
-	</style>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Crullach</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
-<body>
-	
-	<script>
-	
-		function genPlanet() {
-			// first, we scramble a list of the biome types
-			biomes = [ "grass", "forest", "marsh", "jungle", "desert", "tundra", "mountain", "arctic", "magma" ]
-			
-			m = biomes.length
-			
-			while (m) {
-				// pick a remaining element
-				i = Math.floor(Math.random() * m--)
-				// swap it with the current element
-				temp = biomes[m]
-				biomes[m] = biomes[i]
-				biomes[i] = temp
-			}
-			
-			// the amount of the planet's surface which hasn't been assigned a biome
-			remainingLand = 1
-			// our current position in the (scrambled) biome list
-			e = 0
-			biomeAmounts = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-			
-			//take chunks out of the unassigned land until it's gone
-			while (remainingLand > 0) {
-				rand = Math.random() * .6
-				if (rand > remainingLand) { rand = remainingLand }
-				biomeAmounts[e++] += Math.floor(rand * 100)
-				remainingLand -= rand
-				if (e > biomes.length) { e = 0 }
-			}
-			
-			//display how the land was assigned
-			for (o = 0; o < biomes.length; o++) {
-				document.getElementById(biomes[o]).innerHTML = biomeAmounts[o] + '%'
-			}
-			
-			//generate planets size relative to Earth
-			
-			/* old method
-			planetSize = Math.random() + .5
-			planetSize *= 100
-			planetSize = Math.floor(planetSize)
-			planetSize /= 100
-			document.getElementById('size').innerHTML = planetSize + ' Earths'
-			*/
-			
-			//new method
-			
-			planetSizes =	[
-								1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-								1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-								1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-								2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5,
-								5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 9, 9, 10
-							]
-			
-			sizeSelector = Math.floor(Math.random() * 100)
-			sizeModifier = Math.random() - .5
-			planetSize = (planetSizes[sizeSelector] + sizeModifier).toFixed(2)
-			document.getElementById('size').innerHTML = planetSize + ' Earths'
-			
-			//generate the percentage of the planet covered by oceans
-			
-			/* old method
-			oceanCover = Math.floor(Math.random() * 100)
-			document.getElementById('ocean').innerHTML = oceanCover + '%'
-			*/
-			
-			//new method
-			
-			oceanCoverages =	[
-									95, 90, 85, 80, 80, 80, 80, 80, 80, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75, 75,
-									70, 70, 70, 70, 70, 70, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10,  5
-								]
-			
-			coverageSelector = Math.floor(Math.random() * oceanCoverages.length)
-			coverageModifier = Math.floor(Math.random() * 5)
-			oceanCoverage = (oceanCoverages[coverageSelector] + coverageModifier)
-			document.getElementById('ocean').innerHTML = oceanCoverage + '%'
-			
-			//determine resource ranks
-			resources = ["metal", "exo-metal", "nuke", "gem", "d-crystal", "wood", "food", "tuff-stuf", "shiny-stuff"]
-			
-			for (a = 0; a < resources.length; a++) {
-				if (Math.random() > .95) {
-					rankSeed = Math.random()
-					if (rankSeed > .95) {
-						document.getElementById(resources[a]).innerHTML = "4 ranks"
-					} else if (rankSeed > .85) {
-						document.getElementById(resources[a]).innerHTML = "3 ranks"
-					} else if (rankSeed > .75) {
-						document.getElementById(resources[a]).innerHTML = "2 ranks"
-					} else {
-						document.getElementById(resources[a]).innerHTML = "1 ranks"
-					}
-				} else {
-					document.getElementById(resources[a]).innerHTML = "0 ranks"
-				}
-			}
-			
-		}
-	
-	</script>
-	
-	<script src="planetRendering.js"></script>
-	
-	<canvas id="canvas" width="800px" height="400px"></canvas>
-	
-	<h3>Planet Generator</h3>
-	<h4>Version 1.1</h4>
-	
-	<ul id="mainlist">
-	
-		<li>Size: %<span id="size"></span></li>
-		<li>Ocean Coverage: %<span id="ocean"></span></li>
-		<li>Land Composition:
-			<ul class="sublist">
-				<li>Grasslands: <span id="grass"></span></li>
-				<li>Forests: <span id="forest"></span></li>
-				<li>Marshes: <span id="marsh"></span></li>
-				<li>Jungles: <span id="jungle"></span></li>
-				<li>Deserts: <span id="desert"></span></li>
-				<li>Tundras: <span id="tundra"></span></li>
-				<li>Mountains: <span id="mountain"></span></li>
-				<li>Arctic Wastes: <span id="arctic"></span></li>
-				<li>Magmatic Wastes: <span id="magma"></span></li>
-			</ul>
-		</li>
-		<li>Resources:
-			<ul class="sublist">
-				<li>Heavy Metals: <span id="metal"></span> </li>
-				<li>Exotic Metals: <span id="exo-metal"></span> </li>
-				<li>Nuclear Materials: <span id="nuke"></span> </li>
-				<li>Rare Gems: <span id="gem"></span> </li>
-				<li>Demeritium: <span id="d-crystal"></span> </li>
-				<li>Wood: <span id="wood"></span> </li>
-				<li>Food: <span id="food"></span> </li>
-				<li>Murjanium: <span id="tuff-stuf"></span> </li>
-				<li>Scellium: <span id="shiny-stuff"></span> </li>
-			</ul>
-		</li>
-	
-	</ul>
-	
-	<button onclick="genPlanet()">Generate Planet</button>
-	
-	To do:
-	<ul class="sublist">
-		<li class="done">Weight ocean coverage towards ~70%</li>
-		<li class="done">Change planet size: range should be .5 to 10 earths, weighted towards smaller planets</li>
-	</ul>
-	
+<body style="max-width: 1000px; margin: auto;">
+  <div class="container">
+    <header class="my-2">
+      <h1>Crullach</h1>
+      <p class="lead">System reference document</p>
+    </header>
+    <main>
+      <p>After weeks at sea, land pierces the horizon. A mysterious continent
+        awaits you, and with it the promise of wealth, power, and freedom
+        unimaginable. Will you tame this frontier, or die like a dog? Only
+        one thing is certain: Crullach has no sympathy.
+      </p>
+
+
+
+      <h2 id="overview">Overview</h2>
+      <p>Crullach (pronounced like "crew-lock" or "craw-latch") is a newly
+        discovered island. As a player, you take control of an ambitious
+        individual with designs on it. In typical <em>Armada</em> fashion,
+        the mechanics are designed to faciliate competition in the military
+        and economic dimensions while allowing for broad freedom in choosing
+        one's objectives.
+      </p>
+
+      <hr>
+
+      <h2>Mechanics</h2>
+      <p>The two primary systems of Crullach are those governing characters
+        and settlements. Characters are individual people while settlements
+        are populated places. You interact with the game world through a
+        player character and their associated characters and settlements;
+        collectively, these form your faction.
+      </p>
+      <h3 id="characters">Characters</h3>
+      <p>Rather than tracking detailed statistics, characters in Crullach
+        only require a level and, if their level is above zero, a class.
+        Here's an example character sheet:
+      </p>
+      <div class="border p-1 mx-2 mb-3">
+        <code>
+            Millian Krain - Level 2 Mercenary
+          </code>
+      </div>
+      <p>More rarely, a character could have multiple classes, each with
+        their own level:
+      </p>
+      <div class="border p-1 mx-2 mb-3">
+        <code>
+            Godus Lanshaw - Lvl 3 Hunter / Lvl 1 Merchant
+          </code>
+      </div>
+      <p>Finally, characters can have statuses. These are simple descriptors
+        that explain how the character is different from others of their
+        class. These can be inborn traits or temporary conditions. They can
+        be chosen at the start of the game or assigned by the game master as
+        needed. Statuses can also be removed by the game master. Examples of
+        statuses are words like "wounded", "brave", "ugly" or "eagle-eyed".
+      </p>
+      <h3>Settlements</h3>
+      <p>Controlling a character is only half of the game. In pursuing your
+        you will doubtlessly wish to found and improve settlements. These
+        will provide you with money, resources and manpower, as well as being
+        the infrastructure you'll need to accomplish your goals. Settlements
+        are represented almost exactly like characters; they have a class (or
+        classes) and levels in these classes. But where a character might be
+        a pikeman or a silversmith, a settlement is a village, or a trading
+        post, or a fort. Also like characters, settlements can have statuses.
+        Settlements are created through <a href="#projects">projects</a>.
+      </p>
+      <h3>Creating a Faction</h3>
+      <p>When designing your faction, the first step is to have a concept.
+        Your character should have a reason to be exploring Crullach. They
+        might be after money, or fame, or independence for a religious or
+        ethnic group.
+      </p>
+      <p>As a baseline, your player character is level one and has a class of
+        your choice. Classes should be specific and represent concrete
+        skills. Specificity and effectiveness are inversely correlated; a
+        "fighter" might be comfortable with any weapon or armor but will be
+        at a disadvantage in a duel against a "pikeman" using his weapon of
+        choice, assuming the levels are the same.
+      </p>
+      <p>In addition to your character and their class, you have 18 pips to
+        spend on improving your situation. Optionally, you may gain 2 more
+        pips by adding a negative status to your character. This status should
+        be strictly harmful and not easily mitigated.
+      </p>
+      <p>Pips can be spent on the following options. Each option can be taken
+        as many times as you like and can afford.
+      </p>
+      <ul>
+        <li>10 level 0 peasants. They believe in your cause and are ready to
+          endure hardship for you.
+        </li>
+        <li>A level 1 specialist. Choose their class. Their relationship with
+          you is yours to decide; they could be a relative, business partner,
+          friend, slave, etc.
+        </li>
+        <li>3 level 0 specialists. As above, but less skilled.</li>
+        <li>Increase the level of your player character or one of your
+          specialists. The number of pips required is equivalent to their new
+          level. For example, advancing a level one character to level 2 costs
+          2 pips. This is cumulative; taking a level 1 character to level 3
+          costs 2 + 3 = 5 pips.
+        </li>
+        <li>Add a useful status to one of your characters.</li>
+        <li>100 gold groens. See <a href=#economics>economics</a> below for
+          what this means and what you can spend them on.
+        </li>
+      </ul>
+      <h3 id="economics">Economics</h3>
+      <p>The common currency of the empire is the silver drang, a small coin,
+        a bit smaller and thicker than a dime, sufficient for a day's expenses
+        in any city. 20 drangs is worth one golden groen, a month's wages for
+        an unskilled laborer. More valuable coinage exists but is rarely seen,
+        including the platinum vech (120 groens) which requires the expertise
+        of a mage to mint.
+      </p>
+      <h4>Prices:</h4>
+      <p>Prices are in groens. An * means that a price is variable; see the
+        notes below the table.
+      </p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>Item</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="4">Basic Supplies</td>
+            <td>Long lasting provisions, 1 man, 1 month</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>Barrel (filling with potable water is free)</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>Extra clothing for 1. Choose a climate.</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>Salt, for Preserving 10 units of food</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td rowspan="4">Tools and Materials</td>
+            <td>Basic tool for manual labor (axe, hoe, pick, etc.)</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>Tools of the trade for one specialist</td>
+            <td>5*</td>
+          </tr>
+          <tr>
+            <td>Raw Materials for Manufacturing</td>
+            <td>**</td>
+          </tr>
+          <tr>
+            <td>Wagonful of Construction Quality Wood or Stone</td>
+            <td>20</td>
+          </tr>
+          <tr>
+            <td rowspan="5">Transportation</td>
+            <td>Wagon</td>
+            <td>20</td>
+          </tr>
+          <tr>
+            <td>Riding Horse</td>
+            <td>30</td>
+          </tr>
+          <tr>
+            <td>Canoe</td>
+            <td>10</td>
+          </tr>
+          <tr>
+            <td>Small Sailing Ship</td>
+            <td>50</td>
+          </tr>
+          <tr>
+            <td>Cog</td>
+            <td>300</td>
+          </tr>
+          <tr>
+            <td rowspan="8">Agriculture and Industry</td>
+            <td>Seed (staple), Yields ~10x</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>Seed (cash crop), Yields ~10x</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td>Beast of Burden</td>
+            <td>25</td>
+          </tr>
+          <tr>
+            <td>Plough (2 Beasts)</td>
+            <td>10</td>
+          </tr>
+          <tr>
+            <td>Wagonful of Fuel</td>
+            <td>20</td>
+          </tr>
+          <tr>
+            <td>Small Animal (Chicken, Polecat, etc)</td>
+            <td>1</td>
+          </tr>
+          <tr>
+            <td>Medium Animal (Pig, Goat, Donkey, etc)</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td>Cattle</td>
+            <td>20</td>
+          </tr>
+          <tr>
+            <td rowspan="4">Military</td>
+            <td>Soldier's Kit (Light)</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td>Soldier's Kit (Medium)</td>
+            <td>10</td>
+          </tr>
+          <tr>
+            <td>Soldier's Kit (Heavy)</td>
+            <td>20</td>
+          </tr>
+          <tr>
+            <td>Warhorse</td>
+            <td>50</td>
+          </tr>
+          <tr>
+            <td rowspan="4">Exploration</td>
+            <td>Spyglass</td>
+            <td>5</td>
+          </tr>
+          <tr>
+            <td>Camping Gear</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>Climbing Gear</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>Healing Regents</td>
+            <td>10</td>
+          </tr>
+          <tr>
+            <td rowspan="2">Miscellaneous</td>
+            <td>Writing Materials</td>
+            <td>10</td>
+          </tr>
+          <tr>
+            <td>Luxury Goods</td>
+            <td>***</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>* Tool quality 0. Each +1 quality doubles cost. See <a href="#specialists">
+        Specialists</a> in the gameplay section for an explanation of tool quality.
+      </p>
+      <p>** Raw materials are one fifth the cost of their product. Enough metal
+        and charcoal to forge tools for 5 laborers would be one groen, for
+        example.
+      </p>
+      <p>*** As much as you're willing to spend! This could be fine clothing,
+        expensive liquor, opulent building materials, or anything else with a
+        price far exceeding its actual utility. Frequently useful to keep
+        spirits up.
+      </p>
+      <h3>Gameplay</h3>
+      <p>Roleplay in Crullach is fluid and the passage of time will vary based on
+        in game events. Resource management is done on a monthly basis. Each month
+        you will allocate your available labor and resources towards various
+        projects and handle events. Expect months to tick over every other day
+        at 5pm.
+      </p>
+      <p>Turns can vary greatly based on what is happening in the game world.
+        However, you will almost always do the following:
+      </p>
+      <ul>
+        <li>Update your stockpiles of food and money</li>
+        <li>Divide your available labor among ongoing projects</li>
+        <li>Handle events</li>
+      </ul>
+      <p>Make sure to properly organize your characters, settlements, and
+        stockpiles for easy access and updating. Use your faction channel.
+        It is extremely important to know what you have and where it is. Also
+        be aware of your primary character's location, as news sometimes takes
+        time to travel.
+      </p>
+      <h4 id="projects">Projects</h4>
+      <p>The core action of settlement management in Crisis on Crullach is
+        assigning projects. A project is a defined task which requires a
+        certain amount of labor and resoruces to complete. This definition is
+        purposefully open ended. Here are some examples of projects:
+      </p>
+      <ul>
+        <li>Building a bridge</li>
+        <li>Mapping a hex</li>
+        <li>Planting or harvesting the year's crop</li>
+        <li>Choosing the best site for a new mine</li>
+      </ul>
+      <p>Be creative! Your very survival may depend on it. As game master, my
+        goal is to promote and reward clever solutions; use your resources well,
+        and your reliance on lucky rolls should be minimal.
+      </p>
+      <p>The biggest limitation to completing projects is labor. Labor is
+        measured in manhours, a slightly abstracted representation of work
+        done. A healthy human adult working at a sustainable pace can provide
+        you with 250 manhours each month. In a pinch, you can push your people
+        further, but beware the inevitable harm to morale and bodily health
+        alike. Track your available monthly manhours, as this is your biggest
+        resource. Each month, you will be informed about any changes in your
+        available labor. Gaining or losing workers will affect the labor pool,
+        but other factors can modify it as well. Harsh weather, disease, or
+        malnutrition might reduce the efficiency of your workers, for example.
+      </p>
+      <p>To be productive, laborers need the right tools, materials, and
+        guidance. Tools may be possible to improvise, but this will lower
+        efficiency. Gathering or moving materials may also add time to a
+        project. Complicated projects will need to be overseen by a specialist.
+      </p>
+      <h4>Buildings</h4>
+      <p>You can acquire buildings by completing projects. Buildings are like
+        class levels for your settlements, allowing them to help you achieve
+        your goals. Generally, a project to construct a building takes about
+        5,000 manhours per intended level of the building, plus one. Once you
+        have one or more buildings on a hex, that hex becomes one of your
+        settlements. Keep track of your settlements and the buildings they
+        contain.
+      </p>
+      <p>Like character classes, building types are not restricted to a premade
+        list, but have a name to describe their purpose. Here are some possible
+        buildings:
+      </p>
+      <ul>
+        <li>Farm Estate</li>
+        <li>Watch Tower</li>
+        <li>Trading Post</li>
+        <li>Fortification</li>
+        <li>Mine</li>
+        <li>Forge</li>
+      </ul>
+      <p>Buildings may need upkeep over time to combat decay and accidents.
+        Expect to spend more maintaining costlier buildings.
+      </p>
+      <p><b>If you make sketches of your building and settlement layouts,
+        they'll be slightly cheaper to construct.</b> Having visuals will make
+        exploration more interesting and immersive for everyone!
+      </p>
+      <h4 id="specialists">Specialists</h4>
+      <p>Knowledge can be more valuable than any tool. Only those with the correct
+        skills can exploit the wealth of Crullach. A specialist is a character
+        with a class focused on some non-combat field like construction, farming,
+        or prospecting. They can be purchased with pips as part of faction building
+        or hired later. Because of the great variety of possible specialists, there
+        are no rules for individual types. Instead, they are all governed by
+        general rules with the details determined on a case by case basis.
+      </p>
+      <p>The main functions of specialists are to advise you and oversee
+        projects. As advisors, they are a valuable source of information. The
+        mechanics behind important aspects of settlement building such as
+        agriculture are purposefully opaque; consider specialists and their
+        advice to be your way of peaking behind the veil and getting hints on
+        the best course of action. For example, if you wish to farm, you will
+        want an agricultural specialist to advise you on what crops would grow
+        best on your land.
+      </p>
+      <p>Specialists can always advise you, but to actually perform their trade
+        they require tools. The quality of tools available to the specialist
+        limit how well they can do their job. In gameplay terms, the quality
+        of the specialist's tools caps their effective character level. A level
+        4 agriculturalist with tools of quality 2 will make rolls as if he is
+        only second level. Depending on their task and specialty, they may
+        require upkeep as well. The cost of upkeep, when applicable, is one
+        fifth the cost of tools, per month. This is in addition to the costs of
+        any raw materials the specialist is processing.
+      </p>
+
+      <h4>Agents</h4>
+      <p>Your primary character can only be in one place at a time. To solve
+        this problem, you can assign your underlings as agents and send them
+        off to perform various tasks. Unlike projects, you won't know the
+        status of the agent or his task until he returns to you, or not at all
+        if the worst happens. You must properly supply your agent and give them
+        carefully worded instructions, because once they've left, you cannot
+        change them.
+      </p>
+
+      <p>Some tasks are especiallly suitable for agents:
+      </p>
+
+      <ul>
+        <li>Trade. Unless your character is a merchant and personally goes
+          about handling the faction's finances, an agent will be needed to
+          import or export. A skilled negotiator could be invaluable for
+          getting good deals for your faction.
+        </li>
+        <li>Recruitment. An agent can be sent back to Exeter in order to seek
+          out candidates and bring them back to Crullach. You must describe the
+          type of people you want, and your agent will do their best to select
+          and attract recruits. The amount of time taken and the likelihood of
+          success depends on the rarity of fitting candidates (peasants are
+          plentiful, master glassblowers are not), the relevant level of the
+          agent, and how good a deal you're offering. "Be my servant" may
+          attract the desparate or guillible, but the most useful people want
+          their value to be recognized and rewarded.
+        </li>
+        <li>Exploration. Being gone for extended periods in the wild is a good
+          way to come back to a devastated settlement.
+        </li>
+        <li>Diplomacy. There are no telephones on Crullach; aside from official
+          visits, communication between distant settlements must happen through
+          representatives. Make sure to pick someone you trust, and that they
+          know what they're allowed to promise.
+        </li>
+      </ul>
+
+      <h4>Advancement</h4>
+      <p>Over time, characters can become more skilled. This will happen semi-
+        randomly. Major accomplishments are especially likely to result in
+        character advancement. Characters growing in ability may not be
+        immediately beneficial. Specialists will usually need better tools to
+        make use of a higher level. A disloyal character gaining levels may
+        inspire them to plot against you!
+      </p>
+
+      <p>Primary characters will level faster than others. When your primary
+        character levels up, you may choose to advance one of their current
+        classes or give them a new class at level 1.
+      </p>
+
+      <p>This system is purposefully limited. The real way to become more
+        powerful in Crullach is through building up your settlements, gaining
+        wealth and growing your population. There are always opportunities!
+      </p>
+
+      <h4>Action Resolution</h4>
+
+      <p>Occasionally, to facilitate drama, an action will require a roll of
+        the dice. In such situations, the GM will state a difficulty and ask
+        for a roll. If the character performing the action has a class relevant
+        to it, a d6 is rolled and the level added to the result. Otherwise, a
+        d4 is rolled. If the action is higher than the difficulty, the action
+        has the intended result. If the result is equal to the difficulty, the
+        GM may or may not impose a complication. Otherwise, the action does not
+        have the intended result.
+      </p>
+
+      <figure class="border px-2 pt-2 mx-2 pb-2 mb-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Difficulty</th>
+              <td>Level 0</td>
+              <td>Level 1</td>
+              <td>Level 2</td>
+              <td>Level 3</td>
+              <td>Level 4</td>
+              <td>Level 5</td>
+              <td>Level 6</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>2</th>
+              <td>83</td>
+              <td>100</td>
+              <td>100</td>
+              <td>100</td>
+              <td>100</td>
+              <td>100</td>
+              <td>100</td>
+            </tr>
+            <tr>
+              <th>4</th>
+              <td>50</td>
+              <td>67</td>
+              <td>83</td>
+              <td>100</td>
+              <td>100</td>
+              <td>100</td>
+              <td>100</td>
+            </tr>
+            <tr>
+              <th>6</th>
+              <td>17</td>
+              <td>33</td>
+              <td>50</td>
+              <td>67</td>
+              <td>83</td>
+              <td>100</td>
+              <td>100</td>
+            </tr>
+            <tr>
+              <th>8</th>
+              <td>0</td>
+              <td>0</td>
+              <td>17</td>
+              <td>33</td>
+              <td>50</td>
+              <td>67</td>
+              <td>83</td>
+            </tr>
+            <tr>
+              <th>10</th>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+              <td>17</td>
+              <td>33</td>
+              <td>50</td>
+            </tr>
+          </tbody>
+        </table>
+        <code>Success probabilities for certain levels and difficulties.</code>
+      </figure>
+
+      <p>At the GM's discretion, characters can use their class as a similar
+        class of a lower level. For example, a level 3 mercenary attempting to
+        train soldiers could perform the task as a level 1 commander.
+      </p>
+
+      <p>Some actions are directly opposed by another person. In such cases,
+        both characters roll in the usual way. But in addition to beating the
+        difficulty, their result must be higher than their opponents. Both
+        sides of a contest failing to equal or exceed the difficulty results
+        in a fumble and a continuation of the contest after a short time,
+        possibly allowing others nearby to intervene.
+      </p>
+
+      <p>When a roll is made in a dramatic situation, the GM will not reveal
+        the difficulty number. After a roll but before the GM reveals the
+        outcome, the player has the option of pushing it, giving them the
+        opportunity to reroll. However, if the reroll is a failure, the
+        situation will escalate; the consequences for failure will be more dire
+        and the failing character will gain a negative status. The GM is the
+        final arbiter of what counts as a dramatic situation.
+      </p>
+
+      <h3>Warfare</h3>
+      <p>An army is an expensive undertaking. In a pinch, any able-bodied men
+        can be mustered to fight, but they’ll perform relatively poorly and
+        would be hopeless in an extended offensive operation. A competent
+        fighting force that can project power must be actively maintained.
+      </p>
+
+      <h4>Raising Forces</h4>
+      <p>Creating an army requires manpower, equipment, leadership, and time.
+        Competent soldiers are classed characters; peons can only form
+        militias. Turning ten peons into level 0 fighting men requires one
+        month and a difficulty 4 roll from a trainer. Equipment must be
+        purchased or made.
+      </p>
+
+      <p>Soldiers can perform other tasks but must spend at least half of their
+        time on active duty or exercises to remain ready. Failing this
+        requirement disbands the force; reassembling it requires retraining and
+        paying to repair unmaintained equipment proportional to the period of
+        neglect.
+      </p>
+
+      <h4>Force Representation</h4>
+      <p>Each soldier has combat pips based on their type, representing their
+        basic combat capabilities. Pips come in 4 types:
+      </p>
+
+      <ul>
+        <li>Shock, representing the basic effectiveness of the soldier in close combat</li>
+        <li>Fire, for lethality at distances beyond a thrown weapon's reach</li>
+        <li>Thrust, for long piercing weapons designed to fight cavalry</li>
+        <li>Maneuver, for rapid response and flanking ability</li>
+      </ul>
+
+      <p>An army's total shock, fire, and thrust pips added together is its
+        <em>strength</em>.
+      </p>
+
+      <p>Soldiers have a type representing how they are equipped and fight. The
+        The pips are as described above; equipment cost is the type of
+        soldier's kit and/or mount needed.
+      </p>
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Shock</th>
+            <th>Fire</th>
+            <th>Thrust</th>
+            <th>Maneuver</th>
+            <th>Equipment Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Militia</td>
+            <td>1</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>None</td>
+          </tr>
+          <tr>
+            <td>Skirmisher<sup>†</sup></td>
+            <td></td>
+            <td>1</td>
+            <td></td>
+            <td></td>
+            <td>Light</td>
+          </tr>
+          <tr>
+            <td>Light Infantry</td>
+            <td>2</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Light</td>
+          </tr>
+          <tr>
+            <td>Medium Infantry</td>
+            <td>3</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Medium</td>
+          </tr>
+          <tr>
+            <td>Heavy Infantry</td>
+            <td>4</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Heavy</td>
+          </tr>
+          <tr>
+            <td>Pikeman</td>
+            <td>2</td>
+            <td></td>
+            <td>2</td>
+            <td></td>
+            <td>Heavy</td>
+          </tr>
+          <tr>
+            <td>Light Cavalry<sup>†</sup></td>
+            <td>5</td>
+            <td></td>
+            <td></td>
+            <td>1</td>
+            <td>Light + Riding Horse</td>
+          </tr>
+          <tr>
+            <td>Heavy Cavalry</td>
+            <td>6</td>
+            <td></td>
+            <td></td>
+            <td>1</td>
+            <td>Heavy + Warhorse</td>
+          </tr>
+          <tr>
+            <td>Archer</td>
+            <td></td>
+            <td>2</td>
+            <td></td>
+            <td></td>
+            <td>Medium</td>
+          </tr>
+          <tr>
+            <td>Battlemage</td>
+            <td></td>
+            <td>4</td>
+            <td></td>
+            <td></td>
+            <td>Variable</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>†: Contributes to the reconnaissance strength of the force.
+      </p>
+
+      <h5>Exceptional Soldiers</h5>
+      <p>Soldiers with a level of 1 or more are superior among men and project
+        superior force in battle. The soldier's pips are multiplied by their
+        level minus 1, except for maneuver which is unaffected. Take care not
+        to rely overmuch on such men, lest the bulk of your power be brought
+        low by a single stray arrow. A man who achieves too much glory might
+        also question your leadership. If you are nothing without him, why
+        should he take orders from you?
+      </p>
+
+      <p>Exceptional equipment can further amplify the power of a mighty
+        warrior. Equipment fine enough to multiply a soldier's effectiveness
+        is not for sale at game start; the holders of such great power tend to
+        guard it jealously. Such items are generaly unique and do not share
+        mechanics.
+      </p>
+
+      <h4>Mass Combat</h4>
+      <p>Except where specifically noted, rolls related to mass combat
+        scenarios cannot be pushed.
+      </p>
+
+      <h5>Movement</h5>
+      <p>Armies move depending on their type and stance. Foot soldiers move 10
+        miles per day. Add another 10 miles for mounts, and another 10 if
+        soldiers travel recklessly, strung out and without scouting. Speed is
+        halved for bad weather and halved again for bad terrain. Armies moving
+        through unknown lands are liable to become lost.
+      </p>
+
+      <h5>Starting a Battle</h5>
+      <p>When two opposing armies enter the same hex, the commanders roll a
+        contest. Both parties roll in secret and may push their roll if
+        desired. The following modifiers effect the contest:
+      </p>
+
+      <ul>
+        <li>Higher recon strength than opponent: +1</li>
+        <li>Noncombat stance: -2</li>
+        <li>On familiar terrain (possessing maps and experience): +1</li>
+      </ul>
+
+      <p>In the case of a tie, both sides enter battle on equal footing.
+        Otherwise, the winner has initiative equivalent to the margin by which
+        he beats the loser. At this point a series of rounds are played until
+        one or both forces retreat, surrender, or are destroyed.
+      </p>
+
+      <h5>Strategies and Modifiers</h5>
+      <p>At the beginning of each round, the commanders of the two forces
+        privately choose a strategy from the following list:
+      </p>
+
+      <ul>
+        <li>Attack. The default, with no special effects.</li>
+        <li>Defend. Gain +1 (or +2 with fire superiority) but gain no
+          initiative if the round is won.
+        </li>
+        <li>Charge. Gain +1 but take double casualties. Allows pushing rolls.
+          If a pushed charge fails, take <em>quadruple</em> casualties!
+        </li>
+        <li>Feint. Suffer -1 but gain double initiative on a victory.</li>
+        <li>Retreat. Disengage on a victory.</li>
+        <li>Route. Disengage, guaranteed, but take double casualties.</li>
+        <li>Parley. If the enemy commander accepts, there is a ceasefire and
+          the two forces can negotiate. If the parley is rejected, the
+          commander must change his strategy to defend, retreat, or route.
+        </li>
+      </ul>
+
+      <p>After choosing strategies, the commanders roll a contest with several
+        modifiers.
+      </p>
+
+      <h6>Strength Advantage</h6>
+      <p>The more powerful force, as by strength value (shock + fire + thrust),
+        gains a bonus commensurate with its degree of advantage, calculated as
+        the ratio of the larger force's strength to the smaller.
+      </p>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Strength Ratio</th>
+            <th>Bonus</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>+0</td>
+          </tr>
+          <tr>
+            <td>1.5</td>
+            <td>+1</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>+2</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>+3</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>If the ratio falls in between two values, round down; 2.3 rounds to 2,
+        1.6 rounds to 1.5, etc. The progression continues indefinitely.
+        The commander of the larger force gets the bonus; the commander of the
+        smaller force does not receive a corresponding penalty.
+      </p>
+
+      <h6>Initiative</h6>
+      <p>In a battle, one side can have initiative, a number representing a
+        variety of factors which give a situational advantage. Only one side
+        can have initiative, or neither. The side with initiative adds the
+        amount to their roll.
+      </p>
+
+      <h6>Superiority</h6>
+      <p>A side with more of certain class of units gains superiority in that
+        type. If a commander's army has 50% more fire pips than his opponent,
+        he has fire superiority and gains +1. If he has double the fire pips or
+        more, he gains +2. Maneuver superiority works similarly, with a catch.
+        Before the ratio of maneuver pips is calculated, each side subtracts
+        the other's thrust pips from their own maneuver pips.
+      </p>
+
+      <h6>Damage</h6>
+      <p>As armies take casualties, they lose fighting effectiveness. Every
+        full 10% of a force's effectiveness lost adds a -1 penalty to the rolls
+        of its commander.
+      </p>
+
+      <h5>Playing the Round</h5>
+      <p>With all modifiers tallied, the commanders roll a contest. This roll
+        can be pushed if the charge strategy was chosen. Calculate the margin
+        by which the winner of the contest beat the loser (0 if there was no
+        winner). Both sides take casualties based on this margin, according to
+        the following table:
+      </p>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Margin</th>
+            <th>Winner Casualties</th>
+            <th>Loser Casualties</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0</td>
+            <td>10%</td>
+            <td>10%</td>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>10%</td>
+            <td>15%</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>10%</td>
+            <td>20%</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>5%</td>
+            <td>20%</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>5%</td>
+            <td>25%</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>0%</td>
+            <td>25%</td>
+          </tr>
+          <tr>
+            <td>6-7</td>
+            <td>0%</td>
+            <td>30%</td>
+          </tr>
+          <tr>
+            <td>8-9</td>
+            <td>0%</td>
+            <td>35%</td>
+          </tr>
+          <tr>
+            <td>10+</td>
+            <td>0%</td>
+            <td>40%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>These casualties represent soldiers that are killed, injured, fleeing,
+        etc. In addition to both sides taking casualties, the winner gains
+        initiative. If they already have initiative, increase it by one. If the
+        enemy has initiative, decrease it by one. If neither side has it, the
+        winner gains it.
+      </p>
+
+      <h5>Special Cases</h5>
+      <p>Some combinations of strategies have specific effects:</p>
+
+      <ul>
+        <li>When both commanders choose to defend, the two forces merely
+          skirmish. Halve casualties, rounding down to the nearest multiple of
+          5%.</li>
+        <li>If one side defends while the other retreats, the retreat
+          automatically succeeds, and the retreating force takes half
+          casualties.</li>
+        <li>If one side defends while the other routes, the routing force does
+          not take double casualties.</li>
+        <li>If both sides choose retreat or route, they automatically succeed
+          in disengaging and take no casualties.</li>
+      </ul>
+
+      <h5>Aftermath</h5>
+      <p>If one side of the battle retreated or was destroyed, the other side
+        takes the field. If both sides retreat, neither has the field. An army
+        which has taken the field can regroup and recover their wounded,
+        restoring half of the losses taken during the battle. If the losing
+        army surrendered, the winner may allow them to do the same.
+      </p>
+      <p> Either army, regardless of whether they have the field, can have a
+        dedicated medical character make a roll; they regain the result of the
+        roll as a percentage of their strength, up to the amount of casualties
+        taken.
+      </p>
+      <p>Non-recovered casualties are distributed among the forces by the GM,
+        depending on the course of the battle. The army's pips are recalculated.
+      </p>
+
+      <h4>Sieges</h4>
+      <p>Uhhhhhhh idk yet there shouldn't be any in the early game though.
+      </p>
+
+      <h4>Small Scale Combat</h4>
+      <p>Smaller fights can be handled by the system, but may be stripped down
+        in some cases, reduced to regular rolls or contests. I'm just going to
+        feel it out and see how it goes.
+      </p>
+
+      <hr>
+
+      <h2 id="lore">Lore</h2>
+      <p>Crullach takes place in a medieval low fantasy world. Your character
+        is from Exeter, westernmost continent of the known world. Exeter is
+        <em>de jure</em> under the rule of the Quadrattion, a government
+        lead by a council of four god-kings known as Tetrarchs. In
+        reality, Exeter is divided into functionally independent states bound
+        together by complex webs of tribute and obligation, with the
+        tetrarchs acting as an influential alliance.
+      </p>
+      <div class="border px-2 pt-2 mx-2 mb-3">
+        <img src="crullach_map.png" class="img-fluid">
+        <p>
+          <code>Extent of Imperial Control</code>
+        </p>
+        <p><small>Light red: Imperial crown territories. White: Nominal vassal
+            states paying lip service to the central authorities. Grey: de
+            jure imperial territories, minimal imperial presence. Black:
+            barbarian lands, not claimed. Borders represent the formal
+            boundaries of the various imperial provinces.</small>
+        </p>
+      </div>
+      <h3>The Empire</h3>
+      <p>Exeter. The Quadrattion. <em>The Empire</em>. Many names, but one
+        truth. For the people of Exeter, the empire is completely synonymous
+        with religion and the state at the conceptual level. True separatism
+        is incredibly rare; most find the idea incomprehensible.
+      </p>
+      <p>The story of the empire's founding is the source of its spiritual
+        and political authority. Before the arrival of the tetrarchs, the
+        story goes, Exeter was a land of ignorance. The people lived in fear,
+        terrorized by foul gods and their dark priests. Darkness reigned for
+        an unknowable length of time, for mankind was so primitive that it
+        lacked a calendar. But one day, the tetrachs descended from heaven
+        on angelic horses. They rallied the people, forming a great army
+        against the gods, and overthrew the priests. The tetrarchs declared
+        the beginning of year zero, marking the beginning of the new imperial
+        order.
+      </p>
+      <p>The government instituted by the tetarchs is an authoritarian
+        theocracy, with themselves as the gods of its religion. According to
+        church dogma, the current tetrarchs are one and the same with the
+        founders of the empire. When a tetrarch's body begins to age, they go
+        into seclusion for a time to be reborn in a new shape before emerging
+        once more into public life. Insinuations that the tetrarch has
+        perished and a new man taken his place is heresy. Heresy is treason.
+        Treason is punishable by death.
+      </p>
+      <p>Each tetrarch governs a sacred city from which they project power across
+        Exeter. The cities are arranged in a perfect square, forming a sacred
+        sigil of protection across the entire continent. From north to south,
+        the tetrarchs are Snovius, Karl the Kind, Djinasterin, and Loem. Each
+        sacred city shares the name of its ruling tetrarch. The word of any
+        tetrarch is law anywhere on Exeter, but they usually refrain from
+        acting directly in matters far from their sacred city. Despite their
+        physical distance from each other, the divine nature of the tetrarchs
+        allows them to coordinate flawlessly in managing the empire.
+      </p>
+      <div class="border px-2 pt-2 mx-2 mb-3">
+        <img src="culture_map.png" class="img-fluid">
+        <p>
+          <code>Cultures of Exeter</code>
+        </p>
+        <p><small>Pink: Exeter. Purple: Eskailish. Blue: Keruvian. Green: Norric.
+            Brown: Burgognian. Grey: Cuskotoi.</small>
+        </p>
+      </div>
+    </main>
+  </div>
 </body>
 
 </html>
